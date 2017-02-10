@@ -7,5 +7,19 @@
 
   <body>
     Hello World II!
+
+    <ol>
+    {% for match in matches %}
+      <li>{{match.winner}} > {{match.loser}}</li>
+    {% endfor %}
+    </ol>
+
+    <form action="/new" method="post">
+      Winner:<br>
+      <input type="text" name="winner"><br>
+      Loser:<br>
+      <input type="text" name="loser">
+      <input type="submit" value="Submit">
+    </form>
   </body>
 </html>

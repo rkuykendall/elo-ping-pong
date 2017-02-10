@@ -1,9 +1,10 @@
+import json
 import datetime
 import os
 import sys
 import logging
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -17,7 +18,6 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 
 db = SQLAlchemy(app)
-db.create_all()
 
 
 class Match(db.Model):
@@ -35,9 +35,23 @@ class Match(db.Model):
         self.loser = loser
 
 
+db.create_all()
+
+
+@app.route('/new', methods=['POST'])
+def new():
+    winner = request.form['winner']
+    loser = request.form['loser']
+    match = Match(winner, loser)
+    db.session.add(match)
+    db.session.commit()
+    return json.dumps({})
+
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    matches = db.session.query(Match)
+    return render_template('index.html', matches=matches)
 
 
 if __name__ == '__main__':

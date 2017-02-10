@@ -1,2 +1,4 @@
 choices.txt
 options.txt
+.DS_Store
+*.db
