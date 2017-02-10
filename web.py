@@ -1,8 +1,9 @@
+import datetime
 import os
 import sys
 import logging
 
-from flask import Flask
+from flask import Flask, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -19,9 +20,24 @@ db = SQLAlchemy(app)
 db.create_all()
 
 
+class Match(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    winner = db.Column(db.String(500))
+    loser = db.Column(db.String(500))
+    created_asof = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    updated_asof = db.Column(
+        db.DateTime,
+        default=datetime.datetime.utcnow,
+        onupdate=datetime.datetime.utcnow)
+
+    def __init__(self, winner, loser):
+        self.winner = winner
+        self.loser = loser
+
+
 @app.route('/')
-def gen():
-    return 'Hello World!'
+def index():
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
