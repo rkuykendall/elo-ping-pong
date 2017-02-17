@@ -1,11 +1,12 @@
-import json
 import datetime
 import os
 import sys
 import logging
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
+
+from ranking import ranking
 
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -45,13 +46,14 @@ def new():
     match = Match(winner, loser)
     db.session.add(match)
     db.session.commit()
-    return json.dumps({})
+    return redirect(url_for('index'))
 
 
 @app.route('/')
 def index():
     matches = db.session.query(Match).order_by(Match.created_asof)
-    return render_template('index.html', matches=matches)
+    rankings = ranking(matches)
+    return render_template('index.html', matches=matches, rankings=rankings)
 
 
 if __name__ == '__main__':
