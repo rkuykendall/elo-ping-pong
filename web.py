@@ -50,7 +50,7 @@ def new():
 
 @app.route('/')
 def index():
-    matches = db.session.query(Match)
+    matches = db.session.query(Match).order_by(Match.created_asof)
     return render_template('index.html', matches=matches)
 
 
