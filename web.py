@@ -51,7 +51,7 @@ def new():
 
 @app.route('/')
 def index():
-    matches = db.session.query(Match).order_by(Match.created_asof)
+    matches = db.session.query(Match).order_by(Match.created_asof.desc())
     rankings = ranking(matches)
     return render_template('index.html', matches=matches, rankings=rankings)
 
