@@ -3,7 +3,7 @@ import os
 import sys
 import logging
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from ranking import ranking
@@ -56,5 +56,13 @@ def index():
     return render_template('index.html', matches=matches, rankings=rankings)
 
 
+@app.route('/matches.csv')
+def matches_csv():
+    matches = db.session.query(Match).order_by(Match.created_asof.desc())
+    response = make_response(render_template('matches.csv', matches=matches))
+    response.headers['Content-Disposition'] = "attachment; filename=matches.csv"
+    return response
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

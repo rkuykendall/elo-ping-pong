@@ -3,3 +3,4 @@ options.txt
 .DS_Store
 *.db
 *.pyc
+.idea

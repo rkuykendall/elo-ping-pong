@@ -1,0 +1,3 @@
+Winner,Loser,Date
+{% for match in matches %}{{match.winner}},{{match.loser}},{{match.created_asof.strftime('%Y-%m-%d')}}
+{% endfor %}
