@@ -51,14 +51,14 @@ def new():
 
 @app.route('/')
 def index():
-    matches = db.session.query(Match).order_by(Match.created_asof.desc())
+    matches = db.session.query(Match).order_by(Match.created_asof.asc())
     rankings = ranking(matches)
     return render_template('index.html', matches=matches, rankings=rankings)
 
 
 @app.route('/matches.csv')
 def matches_csv():
-    matches = db.session.query(Match).order_by(Match.created_asof.desc())
+    matches = db.session.query(Match).order_by(Match.created_asof.asc())
     response = make_response(render_template('matches.csv', matches=matches))
     response.headers['Content-Disposition'] = "attachment; filename=matches.csv"
     return response
